@@ -4,7 +4,7 @@
 .navyDialogWrapper .navyDialogTable .navyDialogBtn{color:#fff;background:#70B007;}.navyDialogWrapper .navyDialogTable .navyDialogBtn:hover{background:#4F9803;}
 .navyDialogWrapper .navyDialogTable .navyDialogTitleContainer{width:100%;height:35px;line-height:35px;border-bottom:1px solid #ddd;overflow:hidden;}.navyDialogWrapper .navyDialogTable .navyDialogTitleContainer .closeDialogBtn{font-size:14px;padding-right:5px;color:#999;font-weight:normal;}.navyDialogWrapper .navyDialogTable .navyDialogTitleContainer .closeDialogBtn .leftSecond{padding-right:2px;}
 .navyDialogWrapper .navyDialogTable .navyDialogTitleContainer .dialogTitle{padding-left:5px;font-size:14px;font-weight:normal;color:#999;}
-.navyDialogWrapper .navyDialogTable .navyDialogContentContainer{width:100%;}.navyDialogWrapper .navyDialogTable .navyDialogContentContainer .navyDialogContent{padding:10px 5px 0;}
+.navyDialogWrapper .navyDialogTable .navyDialogContentContainer .navyDialogContent{padding:10px 5px 0;}
 .navyDialogWrapper .navyDialogTable .navyDialogBtnContainer{width:100%;height:40px;line-height:40px;overflow:hidden;margin:10px 0;}.navyDialogWrapper .navyDialogTable .navyDialogBtnContainer .navyDialogBtnContent{padding:5px;text-align:center;}.navyDialogWrapper .navyDialogTable .navyDialogBtnContainer .navyDialogBtnContent .navyDialogBtn{padding:5px 10px;border-radius:5px;}
 .navyDialogWrapper .navyDialogTable .navyDialogBtnContainer .navyDialogBtnContent .navySureBtn{margin-right:10%;}
 .navyDialogWrapper .navyDialogTable .navyDialogBtnContainer .navyDialogBtnContent .marginCenter{margin:auto;}
@@ -17,3 +17,16 @@
 .navyDialogAlert.navyDialogWrapper .successNavyAlert{background-position:0 0;}
 .navyDialogAlert.navyDialogWrapper .errorNavyAlert{background-position:0 -34px;}
 .navyDialogAlert.navyDialogWrapper .warningNavyAlert{background-position:0 -70px;}
+.navyDialogTip.navyDialogWrapper{background:transparent;}.navyDialogTip.navyDialogWrapper .navyDialogTable .navyDialogContentContainer{padding:12px;position:relative;}.navyDialogTip.navyDialogWrapper .navyDialogTable .navyDialogContentContainer .navyDialogContent{background:#fff;border:1px solid red;border-radius:5px;padding:5px 5px 5px 7px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow{width:0;height:0;overflow:hidden;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow1.arrowTop{border-bottom-color:red;top:-8px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow2.arrowTop{border-bottom-color:#fff;top:-7px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow1.arrowBottom{border-top-color:red;bottom:-8px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow2.arrowBottom{border-top-color:#fff;bottom:-7px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .arrowTop,.navyDialogTip.navyDialogWrapper .navyDialogTable .arrowBottom{left:50%;margin-left:-10px;border-top:10px solid transparent;border-bottom:10px solid transparent;border-left:10px dotted transparent;border-right:10px dotted transparent;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .arrowLeft,.navyDialogTip.navyDialogWrapper .navyDialogTable .arrowRight{top:50%;margin-top:-10px;border-top:10px dotted transparent;border-bottom:10px dotted transparent;border-left:10px solid transparent;border-right:10px solid transparent;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow1.arrowLeft{border-right-color:red;left:-8px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow2.arrowLeft{border-right-color:#fff;left:-7px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow1.arrowRight{border-left-color:red;right:-8px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTable .navyTipArrow2.arrowRight{border-left-color:#fff;right:-7px;}
+.navyDialogTip.navyDialogWrapper .navyDialogTipBtnContainer{text-align:center;margin:5px 0 3px 0;}.navyDialogTip.navyDialogWrapper .navyDialogTipBtnContainer .navyDialogTipKnowBtn{border:1px solid #eee;background:#ddd;border-radius:5px;padding:2px 5px;color:#333;}.navyDialogTip.navyDialogWrapper .navyDialogTipBtnContainer .navyDialogTipKnowBtn:hover{color:#000;}

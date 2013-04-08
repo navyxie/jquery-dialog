@@ -58,7 +58,6 @@
             }
         }
         .navyDialogContentContainer{
-            width: 100%;
             .navyDialogContent{
                 padding: 10px 5px 0;
             }
@@ -120,5 +119,87 @@
     }
     .warningNavyAlert{
         background-position:0 -70px;
+    }
+}
+.navyDialogTip.navyDialogWrapper{
+    background:transparent;
+    .navyDialogTable{
+        .navyDialogContentContainer{
+            padding:12px;
+            position:relative;
+            .navyDialogContent{
+                background: #fff;
+                border:1px solid red;
+                border-radius:5px;
+                padding: 5px 5px 5px 7px;
+            }
+        }
+        .navyTipArrow{
+            width:0;
+            height:0;
+            overflow:hidden;
+        }
+        .navyTipArrow1.arrowTop{
+            border-bottom-color:red;
+            top:-8px;
+        }
+        .navyTipArrow2.arrowTop{
+            border-bottom-color:#fff;
+            top:-7px;
+        }
+        .navyTipArrow1.arrowBottom{
+            border-top-color:red;
+            bottom:-8px;
+        }
+        .navyTipArrow2.arrowBottom{
+            border-top-color:#fff;
+            bottom:-7px;
+        }
+        .arrowTop,.arrowBottom{
+            left:50%;
+            margin-left: -10px;
+            border-top:10px solid transparent;
+            border-bottom:10px solid transparent;
+            border-left:10px dotted transparent;
+            border-right:10px dotted transparent;
+        }
+        .arrowLeft,.arrowRight{
+            top:50%;
+            margin-top: -10px;
+            border-top:10px dotted transparent;
+            border-bottom:10px dotted transparent;
+            border-left:10px solid transparent;
+            border-right:10px solid transparent;
+        }
+        .navyTipArrow1.arrowLeft{
+            border-right-color:red;
+            left:-8px;
+        }
+        .navyTipArrow2.arrowLeft{
+            border-right-color:#fff;
+            left:-7px;
+        }
+        .navyTipArrow1.arrowRight{
+            border-left-color:red;
+            right:-8px;
+        }
+        .navyTipArrow2.arrowRight{
+            border-left-color:#fff;
+            right:-7px;
+        }
+    }
+    .navyDialogTipBtnContainer{
+        text-align: center;
+        margin:5px 0 3px 0;
+        .navyDialogTipKnowBtn{
+            border: 1px solid #eee;
+            background: #ddd;
+            border-radius: 5px;
+            padding: 2px 5px;
+            color:#333;
+            &:hover{
+                color: #000;
+            }
+        }
     }
 }

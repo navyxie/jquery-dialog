@@ -31,7 +31,8 @@ NAVY.Dialog = function(contentHtml,options){
         marginTop:null,//对话框距离容器右边的值
         dialogClass:'',//对话框的容器类
         position:'fixed',//对话框定位，默认为固定定位
-        autoCloseSecond:0//自动关闭对话框的时间，0表示不关闭,单位为秒
+        autoCloseSecond:0,//自动关闭对话框的时间，0表示不关闭,单位为秒
+        knowBtnCbf:noop//点击对话框内容时的回掉
     };
     this.contentHtml = contentHtml || '请填充对话框内容';
     $.extend(defaultOptions,options);
@@ -61,16 +62,21 @@ NAVY.Dialog.prototype = {
             })
         }
         //dialog的点击处理事件
-        dialogObj.on('click','.navyDialogBtnClick',function(e){
-            var target = $(e.target);
+        dialogObj.on('click','.navyDialogBtnClick',function(){
+            var target = $(this);
             if(target.hasClass('closeDialogBtn')){
+                _this.closeDialog();
                 options.closeCbf();
             }else if(target.hasClass('navySureBtn')){
+                _this.closeDialog();
                 options.sureBtnCbf();
             }else if(target.hasClass('navyCancelBtn')){
+                _this.closeDialog();
                 options.cancelBtnCbf();
+            }else if(target.hasClass('navyDialogTipKnowBtn')){
+                _this.closeDialog();
+                options.knowBtnCbf();
             }
-            _this.closeDialog();
         });
         //自动关闭
         var autoCloseSecond = options.autoCloseSecond;
@@ -132,8 +138,8 @@ NAVY.Dialog.prototype = {
         //_this.dialogObj = _this.targetObj.find('.navyDialogWrapper');
         var dialogObj = _this.dialogObj;
         var dialogObjWidth = options.dialogWidth || dialogObj.outerWidth(),dialogObjHeight = options.dialogHeight || dialogObj.outerHeight();
-        //对话框最小宽度为100px
-        dialogObjWidth = dialogObjWidth < 100 ? 100 : dialogObjWidth;
+        //对话框最小宽度为80px
+        dialogObjWidth = dialogObjWidth < 80 ? 80 : dialogObjWidth;
         var dialogObjMarginLeft = dialogObjWidth/2 , dialogObjMarginTop = dialogObjHeight/2;
         var marginLeft = options.marginLeft,marginTop = options.marginTop;
         //设置对话框的宽度和高度以及marginLeft和marginTop值
@@ -225,4 +231,121 @@ NAVY.Alert = function(content,options){
         marginTop:options.marginTop || null//对话框距离容器右边的值
     };
     return new NAVY.Dialog(content,alertOptions);
+};
+/**
+ * tip提示框
+ * @param target 提示框的容器
+ * @param content 提示框显示的内容
+ * @param options tip的配置，具体参数如下：
+   options = {
+     isShowKnowBtn:true,//是否显示我知道了按钮，默认现实我知道了按钮
+     knowBtnText：’知道了‘,//知道了按钮文本
+     dialogClass: '',//增加tip的class,用于设置样式
+     autoCloseSecond:0,//自动关闭tip框，默认是3秒钟
+     position:'absolute',//tip的定位，默认是fixed
+     target:'body',//tip框的容器，默认是body
+     knowBtnCbf：function(){},//点击“知道了”按钮回调函数
+     dialogWidth:null,//对话框的宽度
+     dialogHeight:null,//对话框的高度
+     marginLeft:|| null,//对话框距离容器左边的值
+     marginTop:|| null,//对话框距离容器右边的值
+     tipBorderColor:null,//提示框的颜色，注意16进制的颜色值前面加#号哦
+     arrowValue:null//水平方向从左往右，垂直方向从上往下
+   }
+ * @return {NAVY.Dialog}
+ * @constructor
+ */
+NAVY.Tip = function(target,content,options){
+    options = options || {};
+    if(options.isShowKnowBtn === undefined){
+        options.isShowKnowBtn = true;
+    }
+    options.knowBtnText = options.knowBtnText || '知道了';
+    var dialogClass = options.dialogClass;
+    if(dialogClass){
+        dialogClass += ' navyDialogTip';
+    }else{
+        dialogClass = 'navyDialogTip';
+    }
+    var tipOptions = {
+        isShowTiTle:false,//隐藏标题
+        isShowCloseBtn:false,//隐藏关闭按钮
+        isShowSureBtn:false,//隐藏确定按钮
+        isShowCancelBtn:false,//隐藏取消按钮
+        isMask:false,//隐藏遮罩层
+        dialogClass: dialogClass,//增加tip的class,用于设置样式
+        autoCloseSecond:options.autoCloseSecond || 0,//自动关闭tip框，默认是3秒钟
+        position:options.position || 'absolute',//tip的定位，默认是fixed
+        target:target || options.target || 'body',//tip框的容器，默认是body
+        knowBtnCbf : options.knowBtnCbf || noop,//点击“知道了”按钮回掉函数
+        dialogWidth:options.dialogWidth || null,//对话框的宽度
+        dialogHeight:options.dialogHeight || null,//对话框的高度
+        marginLeft:options.marginLeft || null,//对话框距离容器左边的值
+        marginTop:options.marginTop || null,//对话框距离容器右边的值
+        tipBorderColor:options.tipBorderColor || null,//提示框的颜色，注意16进制的颜色值前面加#号哦
+        arrowValue:options.arrowValue || null//水平方向从左往右，垂直方向从上往下
+    };
+    var direction = options.direction || 'top';
+    //箭头的方向
+    var arrowClass = 'arrowTop';
+    switch (direction){
+        case 'bottom':
+            arrowClass = 'arrowBottom';
+            break;
+        case 'left':
+            arrowClass = 'arrowLeft';
+            break;
+        case 'right':
+            arrowClass = 'arrowRight';
+            break;
+        default :
+            arrowClass = 'arrowTop';
+            break;
+    }
+    //提示框的颜色，默认为红色
+    var tipBorderColor = tipOptions.tipBorderColor;
+    //箭头的便宜值，水平方向为margin-left,垂直方向为margin-top
+    var arrowValue = tipOptions.arrowValue;
+    //箭头1和箭头2css的映射对象
+    var tipBorderColorMap1 = {},tipBorderColorMap2={};
+    var paddingValue = 10;//加10是为了修复对话框内容容器.navyDialogContent的10px padding
+    if(tipBorderColor !== null){
+        //设置箭头颜色
+        if(arrowValue !== null){
+            //设置箭头位置
+            tipBorderColorMap1.arrowBottom = 'style="border-top-color:'+tipBorderColor+';left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap1.arrowLeft = 'style="border-right-color:'+tipBorderColor+';top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap1.arrowRight = 'style="border-left-color:'+tipBorderColor+';top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap1.arrowTop = 'style="border-bottom-color:'+tipBorderColor+';left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap2.arrowBottom = 'style="left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap2.arrowLeft = 'style="top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap2.arrowRight = 'style="top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+            tipBorderColorMap2.arrowTop = 'style="left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+        }else{
+            tipBorderColorMap1.arrowBottom = 'style="border-top-color:'+tipBorderColor+'"';
+            tipBorderColorMap1.arrowLeft = 'style="border-right-color:'+tipBorderColor+'"';
+            tipBorderColorMap1.arrowRight = 'style="border-left-color:'+tipBorderColor+'"';
+            tipBorderColorMap1.arrowTop = 'style="border-bottom-color:'+tipBorderColor+'"';
+        }
+    }else if(arrowValue !== null){
+        //设置箭头位置
+        tipBorderColorMap1.arrowBottom = tipBorderColorMap2.arrowBottom = 'style="left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+        tipBorderColorMap1.arrowLeft = tipBorderColorMap2.arrowLeft = 'style="top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+        tipBorderColorMap1.arrowRight = tipBorderColorMap2.arrowRight = 'style="top:0;margin-top:'+(arrowValue+paddingValue)+'px;"';
+        tipBorderColorMap1.arrowTop = tipBorderColorMap2.arrowTop = 'style="left:0;margin-left:'+(arrowValue+paddingValue)+'px;"';
+    }
+    var tipBorderColorCssText1 = tipBorderColorMap1[arrowClass] || '';
+    var tipBorderColorCssText2 = tipBorderColorMap2[arrowClass] || '';
+    content = '<div class="navyTip">'+content+'</div><div '+tipBorderColorCssText1+' class="navyTipArrow navyTipArrow1 absolute '+arrowClass+'"></div><div '+tipBorderColorCssText2+' class="navyTipArrow navyTipArrow2 absolute '+arrowClass+'"></div>';
+    if(options.isShowKnowBtn){
+        content += '<div class="navyDialogTipBtnContainer"><a href="javascript:;" class="navyDialogBtnClick navyDialogTipKnowBtn">'+options.knowBtnText+'</a></div>'
+    }
+    var tipObj = new NAVY.Dialog(content,tipOptions);
+    if(tipBorderColor !== null){
+        //改变提示框内容容器的边框值
+        tipObj.dialogObj.find('.navyDialogContent').css({'border-color':tipBorderColor});
+    }
+    //释放变量内存
+    tipBorderColorMap1 = tipBorderColorMap2 = paddingValue = tipBorderColorCssText1 = tipBorderColorCssText2 = options = null;
+    return tipObj;
 };
