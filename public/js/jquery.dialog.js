@@ -196,6 +196,18 @@ NAVY.Dialog.prototype = {
 NAVY.Alert = function(content,options){
     options = options || {};
     var type = options.type || 'success';
+    options.bgType = options.bgType || 0;
+    var bgType = isNaN(options.bgType) ? 0 : options.bgType;
+    var bgTypeMap = {
+        '0':'uiCss3BlackGradientBG',
+        '1':'uiCss3BlueGradientBG',
+        '2':'uiCss3GreyGradientBG',
+        '3':'uiCss3LightBlueGradientBG',
+        '4':'uiCss3LightSteelBlue',
+        '5':'uiCss3RoyalBlueGradientBG',
+        '6':'uiGoldenrodGradientBG'
+    };
+    var bgTypeClass = bgTypeMap[bgType] || bgTypeMap['0'];
     var alertClass = 'successNavyAlert';
     var dialogClass = options.dialogClass;
     if(dialogClass){
@@ -210,11 +222,14 @@ NAVY.Alert = function(content,options){
         case 'warning':
             alertClass = 'warningNavyAlert';
             break;
+        case 'loading':
+            alertClass = 'loadingNavyAlert';
+            break;
         default :
             alertClass = 'successNavyAlert';
             break;
     }
-    content = '<div class="navyAlert '+alertClass+'">'+content+'</div>';
+    content = '<div class="navyAlert '+bgTypeClass+'"><div class="navyAlertSub '+alertClass+'">'+content+'</div></div>';
     var alertOptions = {
         isShowTiTle:false,//隐藏标题
         isShowCloseBtn:false,//隐藏关闭按钮
@@ -230,7 +245,12 @@ NAVY.Alert = function(content,options){
         marginLeft:options.marginLeft || null,//对话框距离容器左边的值
         marginTop:options.marginTop || null//对话框距离容器右边的值
     };
-    return new NAVY.Dialog(content,alertOptions);
+    if(type === 'loading'){
+        alertOptions.autoCloseSecond = 0;
+    }
+    var dialogObj = new NAVY.Dialog(content,alertOptions);
+    bgTypeMap = alertOptions  = alertClass = dialogClass = type = bgType = bgTypeClass = null;
+    return dialogObj;
 };
 /**
  * tip提示框

@@ -2,6 +2,74 @@
     margin: 0;
     padding: 0;
 }
+.uiCss3BlackGradientBG
+{
+    background:#343434;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#4d4c4c', EndColorStr='#000000');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#4d4c4c', EndColorStr='#000000')";
+    background:-webkit-gradient(linear, 0% 0, 0% 100%, color-stop(0%, #4d4c4c), color-stop(25%, #343434), color-stop(50%, #131313), color-stop(100%, #000000));
+    background:-moz-linear-gradient(top, #4d4c4c, #343434 25%, #131313 50%, #000000 100%);
+    background: linear-gradient(top, #4d4c4c, #343434 25%, #131313 50%, #000000 100%);
+    color:#fff;
+}
+.uiCss3BlueGradientBG
+{
+    background: #315389;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#315389',endColorstr='#0f1e3b');
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#315389',endColorstr='#0f1e3b');
+    background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,#315389),color-stop(100%,#0f1e3b));
+    background:-moz-linear-gradient(top, #315389, #0f1e3b);
+    background:linear-gradient(top, #315389, #0f1e3b);
+}
+.uiCss3GreyGradientBG
+{
+    background-color: #E6E6E6;
+    background-repeat: no-repeat;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+}
+
+.uiCss3LightBlueGradientBG
+{
+    background:#0091f7;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#0091f7', EndColorStr='#0068e8');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#0091f7', EndColorStr='#0068e8')";
+    background:-webkit-gradient(linear, 0% 0, 0% 100%, color-stop(0%, #0091f7), color-stop(100%, #0068e8));
+    background:-moz-linear-gradient(top, #0091f7, #0068e8 100%);
+    background: linear-gradient(top, #0091f7, #0068e8 100%);
+}
+.uiCss3LightSteelBlue
+{
+    background: #b7c1c8;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b7c1c8',endColorstr='#91a0ac');
+    -ms-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b7c1c8',endColorstr='#91a0ac');
+    background:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,#b7c1c8),color-stop(92%,#91a0ac), color-stop(93%,#a4b1ba));
+    background:-moz-linear-gradient(top, #b7c1c8, #91a0ac 92%, #a4b1ba 93%);
+    background:linear-gradient(top, #b7c1c8, #91a0ac 92%, #a4b1ba 93%);
+}
+.uiCss3RoyalBlueGradientBG
+{
+    background:#5f9dde;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#5f9dde', EndColorStr='#3972bf');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#5f9dde', EndColorStr='#3972bf')";
+    background:-webkit-gradient(linear, 0% 0, 0% 100%, color-stop(0%, #5f9dde), color-stop(100%, #3972bf));
+    background:-moz-linear-gradient(top, #5f9dde, #3972bf);
+    background: linear-gradient(top, #5f9dde, #3972bf);
+}
+.uiGoldenrodGradientBG
+{
+    background:#77746c;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#77746c', EndColorStr='#2b261a');
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#77746c', EndColorStr='#2b261a')";
+    background:-webkit-gradient(linear, 0% 0, 0% 100%, color-stop(0%, #77746c), color-stop(100%, #2b261a));
+    background:-moz-linear-gradient(top, #77746c, #2b261a);
+    background: linear-gradient(top, #77746c, #2b261a);
+}
 .navyMaskWrapper{
     position: absolute;
     top:0;
@@ -108,6 +176,12 @@
         }
     }
     .navyAlert{
+        padding: 2px 5px;
+        border-radius: 5px;
+        opacity: 0.8;
+        filter:alpha(opacity=80);
+    }
+    .navyAlertSub{
         padding: 7px 5px 5px 27px;
         background: url(../images/navy-alert-icon.png) no-repeat;
     }
@@ -119,6 +193,9 @@
     }
     .warningNavyAlert{
         background-position:0 -70px;
+    }
+    .loadingNavyAlert{
+        background:url(../images/loading.gif) 0 5px no-repeat;
     }
 }
 .navyDialogTip.navyDialogWrapper{
