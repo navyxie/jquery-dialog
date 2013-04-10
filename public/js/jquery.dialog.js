@@ -68,7 +68,6 @@ NAVY.Dialog.prototype = {
                 _this.closeDialog();
                 options.closeCbf();
             }else if(target.hasClass('navySureBtn')){
-                _this.closeDialog();
                 options.sureBtnCbf();
             }else if(target.hasClass('navyCancelBtn')){
                 _this.closeDialog();
