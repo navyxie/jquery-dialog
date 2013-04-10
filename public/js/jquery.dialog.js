@@ -181,6 +181,7 @@ NAVY.Dialog.prototype = {
  * @param options alert的配置，默认是成功框包含属性如下：
  * options = {
          type : 'success',//alert框类型，默认是成功
+         bgType ：0,//alert的背景类型
          dialogClass: 'navyDialogAlert',//增加alert的class,用于设置样式
          autoCloseSecond:3,//自动关闭alert框，默认是3秒钟
          position:'fixed',//alert的定位，默认是fixed
@@ -199,6 +200,7 @@ NAVY.Alert = function(content,options){
     options.bgType = options.bgType || 0;
     var bgType = isNaN(options.bgType) ? 0 : options.bgType;
     var bgTypeMap = {
+        '-1':'noCss3Bg',
         '0':'uiCss3BlackGradientBG',
         '1':'uiCss3BlueGradientBG',
         '2':'uiCss3GreyGradientBG',
@@ -248,9 +250,7 @@ NAVY.Alert = function(content,options){
     if(type === 'loading'){
         alertOptions.autoCloseSecond = 0;
     }
-    var dialogObj = new NAVY.Dialog(content,alertOptions);
-    bgTypeMap = alertOptions  = alertClass = dialogClass = type = bgType = bgTypeClass = null;
-    return dialogObj;
+    return new NAVY.Dialog(content,alertOptions);
 };
 /**
  * tip提示框
