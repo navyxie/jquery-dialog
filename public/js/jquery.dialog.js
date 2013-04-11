@@ -7,6 +7,19 @@
  * date 2013-04-08
  */
 var NAVY = NAVY || {};
+NAVY.UTIL = NAVY.UTIL || {};
+NAVY.UTIL.Style = NAVY.UTIL.Style || {};
+NAVY.UTIL.Style.getMaxZIndex = function(){
+    var allTags = document.getElementsByTagName('*');
+    var tagLens = allTags.length,i=0,maxZIndex=1;
+    for(;i<tagLens;i++){
+        maxZIndex = Math.max(maxZIndex,allTags[i].style.zIndex || 0 );
+    }
+    return maxZIndex;
+};
+NAVY.UTIL.Style.setMaxZIndex =function(dom){
+    dom.style.zIndex = 1+NAVY.UTIL.Style.getMaxZIndex();
+};
 var noop = function(){};
 NAVY.Dialog = function(contentHtml,options){
     var defaultOptions = {
@@ -32,7 +45,8 @@ NAVY.Dialog = function(contentHtml,options){
         dialogClass:'',//对话框的容器类
         position:'fixed',//对话框定位，默认为固定定位
         autoCloseSecond:0,//自动关闭对话框的时间，0表示不关闭,单位为秒
-        knowBtnCbf:noop//点击对话框内容时的回掉
+        knowBtnCbf:noop,//点击对话框内容时的回掉
+        isDrag:false//是否可以拖动
     };
     this.contentHtml = contentHtml || '请填充对话框内容';
     $.extend(defaultOptions,options);
@@ -68,13 +82,13 @@ NAVY.Dialog.prototype = {
                 _this.closeDialog();
                 options.closeCbf();
             }else if(target.hasClass('navySureBtn')){
-                options.sureBtnCbf();
+                options.sureBtnCbf.apply(_this,arguments);
             }else if(target.hasClass('navyCancelBtn')){
                 _this.closeDialog();
-                options.cancelBtnCbf();
+                options.cancelBtnCbf.apply(_this,arguments);
             }else if(target.hasClass('navyDialogTipKnowBtn')){
                 _this.closeDialog();
-                options.knowBtnCbf();
+                options.knowBtnCbf.apply(_this,arguments);
             }
         });
         //自动关闭
@@ -93,6 +107,42 @@ NAVY.Dialog.prototype = {
                 }
             },autoCloseSecond*1000);
         }
+        if(options.isDrag){
+            var isDrag = false,startPage = {x:0,y:0},startPos={left:0,top:0};
+            dialogObj.find('.navyDialogTitleContainer').css('cursor','move').mousedown(function(e){
+                isDrag = true;
+                NAVY.UTIL.Style.setMaxZIndex(dialogObj[0]);
+                startPage.x = e.pageX;
+                startPage.y = e.pageY;
+                startPos.left = dialogObj.position().left;
+                startPos.top = dialogObj.position().top;
+                return false;
+            });
+            $(document).on('mouseup mousemove',function(e){
+                switch(e.type){
+                    case 'mouseup':
+                        isDrag = false;
+                        return false;
+                        break;
+                    case 'mousemove' :
+                        if(isDrag){
+                            var curPage = {x:e.pageX,y:e.pageY};//当前pageX和pageY值
+                            var moveValueX = curPage.x - startPage.x;//当前鼠标移动的x方向上的值
+                            var moveValueY = curPage.y - startPage.y;//当前鼠标移动的y方向上的值
+                            if(moveValueX % 2 === 0 || moveValueY % 2 === 0){
+                                var curLeft = startPos.left + moveValueX;
+                                var curTop = startPos.top + moveValueY;
+                                curLeft = curLeft <= 0 ? 0  :curLeft;
+                                curTop = curTop <= 0 ? 0 :  curTop;
+                                dialogObj.css({left:curLeft,top:curTop});
+                            }
+                        }
+                        return false;
+                        break;
+                }
+            })
+        }
+
         return this;
     },
     /**
