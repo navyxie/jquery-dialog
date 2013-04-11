@@ -6,7 +6,9 @@
  * version:1.0
  * date 2013-04-08
  */
+var noop = function(){};
 var NAVY = NAVY || {};
+NAVY.console = console || {log:noop,dir:noop};
 NAVY.UTIL = NAVY.UTIL || {};
 NAVY.UTIL.Style = NAVY.UTIL.Style || {};
 NAVY.UTIL.Style.getMaxZIndex = function(){
@@ -20,7 +22,6 @@ NAVY.UTIL.Style.getMaxZIndex = function(){
 NAVY.UTIL.Style.setMaxZIndex =function(dom){
     dom.style.zIndex = 1+NAVY.UTIL.Style.getMaxZIndex();
 };
-var noop = function(){};
 NAVY.Dialog = function(contentHtml,options){
     var defaultOptions = {
         title:'温馨提示',//对话框标题
@@ -194,14 +195,14 @@ NAVY.Dialog.prototype = {
         //设置对话框的宽度和高度以及marginLeft和marginTop值
         if(marginLeft !== null){
             if(marginTop !== null){
-                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:marginTop,left:0,top:0,overflow:'hidden'});
+                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:marginTop,left:0,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
             }else{
-                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:-dialogObjMarginTop,left:0,overflow:'hidden'});
+                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:-dialogObjMarginTop,left:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
             }
         }else if(marginTop !== null){
-            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden'});
+            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
         }else{
-            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:-dialogObjMarginTop,overflow:'hidden'});
+            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:-dialogObjMarginTop,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
         }
         //如果有遮罩层
         if(options.isMask){
@@ -414,7 +415,36 @@ NAVY.Tip = function(target,content,options){
         //改变提示框内容容器的边框值
         tipObj.dialogObj.find('.navyDialogContent').css({'border-color':tipBorderColor});
     }
-    //释放变量内存
-    tipBorderColorMap1 = tipBorderColorMap2 = paddingValue = tipBorderColorCssText1 = tipBorderColorCssText2 = options = null;
     return tipObj;
+};
+//自己封装的$.ajax方法，第一个参数为jquery ajax方法常用参数，第二个为ajax 提示框参数
+NAVY.Ajax = function(options,tipOptions){
+    options = options || {};
+    tipOptions = tipOptions || {};
+    tipOptions.sendTip = tipOptions.sendTip || '数据下载中...';//发送前的提示框
+    tipOptions.errorTip = tipOptions.errorTip || '出了点问题，请再试试！';//发送错误的提示框
+    tipOptions.okTip = tipOptions.okTip || '操作成功了';//发送成功的提示框
+    tipOptions.okObj = tipOptions.okObj || false;//okObj{key:ret,val:value}，这个时判断参数成功给予的提示框，假如有的话。
+    var okObj = tipOptions.okObj;
+    var ajaxLoading = NAVY.Alert(tipOptions.sendTip,{type:'loading'});
+    $.ajax({
+        url:options.url || "",
+        type:options.type || "post",
+        dataType:options.dataType || "json",
+        beforeSend:options.beforeSend || noop,
+        success:function(data){
+            ajaxLoading.closeDialog();
+            if(okObj){
+                if(data[okObj.key] == okObj.val){
+                    NAVY.Alert(tipOptions.okTip);
+                }else{
+                    NAVY.Alert(tipOptions.errorTip,{type:'warning'});
+                }
+            }
+            options.success(data);
+        } || noop,
+        complete:function(data){options.success(data)} || noop,
+        error:function(data){options.error(data);ajaxLoading.closeDialog();NAVY.Alert(tipOptions.errorTip,'error')} || noop,
+        timeout:options.timeout
+    });
 };
