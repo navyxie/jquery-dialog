@@ -99,6 +99,7 @@
 //        arrowValue:null//水平方向从左往右，垂直方向从上往下
         //tip demo:
         NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{knowBtnText:"我知道了",marginTop:60,knowBtnCbf:function(){alert('点击了我知道了按钮')}});
+		new NAVY.Dialog('<div>这是一个可以拖动的对话框</div><div>这是一个可以拖动的对话框</div><div>这是一个可以拖动的对话框</div>',{isDrag:true,sureBtnCbf:function(){alert('点击了确定按钮');this.closeDialog();}});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'bottom',marginTop:120,tipBorderColor:'#000',arrowValue:30});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'left',marginTop:220,tipBorderColor:'#000'});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'right',marginTop:360,tipBorderColor:'#000',arrowValue:20});
