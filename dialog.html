@@ -17,11 +17,15 @@
             width: 600px;
             height: 200px;
             margin: 20px auto;
-            background: blue;
+            padding: 20px 0;
+            background: #fafafa;
         }
         #content{
             width: 100%;
             position: relative;
+        }
+        .testToolTip{
+            padding: 20px 0 0 100px;
         }
         #content ul{
             width: 100%;
@@ -37,7 +41,11 @@
 </head>
 <body>
     <div id="wrapper">
-        <div id="content"></div>
+        <div id="content">
+            <h2  class="testToolTip" title="普通对话框的options具体参数配置普通对话框的options具体参数配数数配配下">普通对话框的options具体参数配置如下</h2>
+            <h2  class="testToolTip" title="点击遮罩层是否关闭对话框">点击遮罩层是否关闭对话框</h2>
+            <div title="点击遮罩层是否关闭对话框">点击遮罩层是否关闭对话框点击遮罩层是否关闭对话点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框</div>
+        </div>
     </div>
 <script type="text/javascript">
     $(function(){
@@ -81,7 +89,7 @@
         //alert error demo:
 //        NAVY.Alert('失败啦！',{type:'error',marginTop:200});
         //alert warning demo:
-//        NAVY.Alert('点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框！',{type:'warning',marginTop:50});
+//        NAVY.Alert('点击遮罩层是否关闭对话框点击遮罩层是否关闭对话框！',{type:'success',marginTop:50});
 //        普通提示框options的具体参数配置如下
 //        isShowKnowBtn:true,//是否显示我知道了按钮，默认现实我知道了按钮
 //        knowBtnText：’知道了‘,//知道了按钮文本
@@ -98,11 +106,11 @@
 //        tipBorderColor:null,//提示框的颜色，注意16进制的颜色值前面加#号哦
 //        arrowValue:null//水平方向从左往右，垂直方向从上往下
         //tip demo:
-        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{knowBtnText:"我知道了",marginTop:60,knowBtnCbf:function(){alert('点击了我知道了按钮')}});
-		new NAVY.Dialog('<div>这是一个可以拖动的对话框</div><div>这是一个可以拖动的对话框</div><div>这是一个可以拖动的对话框</div>',{isDrag:true,sureBtnCbf:function(){alert('点击了确定按钮');this.closeDialog();}});
+//        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'bottom',knowBtnText:"我知道了",marginTop:60,knowBtnCbf:function(){alert('点击了我知道了按钮')}});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'bottom',marginTop:120,tipBorderColor:'#000',arrowValue:30});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'left',marginTop:220,tipBorderColor:'#000'});
 //        NAVY.Tip('#content','<div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div><div>这个是提示关闭对话框</div>',{direction:'right',marginTop:360,tipBorderColor:'#000',arrowValue:20});
+          NAVY.ToolTip('#wrapper');
     });
 </script>
 </body>

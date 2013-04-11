@@ -417,7 +417,7 @@ NAVY.Tip = function(target,content,options){
     }
     return tipObj;
 };
-//自己封装的$.ajax方法，第一个参数为jquery ajax方法常用参数，第二个为ajax 提示框参数
+//Navy封装的$.ajax方法，第一个参数为jquery ajax方法常用参数，第二个为ajax 提示框参数
 NAVY.Ajax = function(options,tipOptions){
     options = options || {};
     tipOptions = tipOptions || {};
@@ -446,5 +446,50 @@ NAVY.Ajax = function(options,tipOptions){
         complete:function(data){options.success(data)} || noop,
         error:function(data){options.error(data);ajaxLoading.closeDialog();NAVY.Alert(tipOptions.errorTip,'error')} || noop,
         timeout:options.timeout
+    });
+};
+//文本提示工具
+NAVY.ToolTip = function(target,options){
+    var defaultOptions = {
+        spaceV : 3,//默认垂直方向间隔
+        spaceH : 0,//默认水平方向间隔
+        bgColor:'#000',//提示框背景颜色
+        color:'#fff',//文本颜色
+        opacity:0.8//透明度
+    };
+    $.extend(defaultOptions.options);
+    var spaceV = defaultOptions.spaceV;
+    var spaceH = defaultOptions.spaceH;
+    var bgColor = defaultOptions.bgColor;
+    var color = defaultOptions.color;
+    var opacity = defaultOptions.opacity;
+    var isCenter = defaultOptions.isCenter;
+    var navyToolTipStyleTxt = 'style=color:'+color+';background:'+bgColor+';opacity:'+opacity+';filter:alpha(opacity='+opacity*100+')';
+    target = $(target);
+    var offsetLeft = target.offset().left,offsetTop = target.offset().top;
+    var targetWidth = target.outerWidth(),targetHeight = target.outerHeight(),eventTarget = null,title=null;
+    var toolTipLeft = 0,toolTipTop = 0,totalWidth = offsetLeft+targetWidth,totalHeight = offsetTop+targetHeight;
+    target.find('[title]').hover(function(e){
+        eventTarget = $(this);
+        title = eventTarget.attr('title');
+        if(title){
+            eventTarget.attr('title','');
+            var eventTargetLeft = eventTarget.offset().left+parseInt(eventTarget.css('padding-left'))+parseInt(eventTarget.css('margin-left'));
+            var eventTargetTop = eventTarget.offset().top, eventTargetWidth = eventTarget.outerWidth(),eventTargetHeight = eventTarget.outerHeight();
+            this.toolTipObj = $('<div class="navyToolTipWrapper"><div class="navyToolTip" '+navyToolTipStyleTxt+'>'+title+'</div></div>').appendTo(target);
+            var toolTipWidth = this.toolTipObj.outerWidth()+spaceH,toolTipHeight = this.toolTipObj.outerHeight()+spaceV;
+            var totalLeft = eventTargetLeft + toolTipWidth ,totalTop = eventTargetTop + toolTipHeight + eventTargetHeight;
+            var tempLeft = (eventTargetLeft - offsetLeft) + toolTipWidth - targetWidth;
+            tempLeft = tempLeft > 0 ? offsetLeft :tempLeft;
+            var tempTop = (eventTargetTop - offsetTop) + eventTargetHeight + toolTipHeight - targetHeight;
+            tempTop = tempTop > 0 ? eventTargetTop - toolTipHeight : tempTop;
+            toolTipLeft = (totalLeft > totalWidth) ? tempLeft : eventTargetLeft;
+            toolTipTop = (totalTop > totalHeight) ? tempTop : eventTargetTop+eventTargetHeight;
+            this.toolTipObj.offset({left:toolTipLeft+spaceH,top:toolTipTop+spaceV})
+
+        }
+    },function(e){
+        $(this).attr('title',title);
+        this.toolTipObj.remove();
     });
 };
