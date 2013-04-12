@@ -2,6 +2,8 @@
     margin: 0;
     padding: 0;
 }
+@tipBorderColor:red;
+@tipBorderBgColor:#fff;
 .uiCss3BlackGradientBG
 {
     background:#343434;
@@ -167,12 +169,11 @@
 
     }
 }
-.navyDialogAlert.navyDialogWrapper{
+.navyDialogAlert{
     background:transparent;
     .navyDialogTable{
         .navyDialogContentContainer{
             padding:0;
-
             .navyDialogContent{
                 padding: 0;
             }
@@ -201,7 +202,7 @@
         background:url(../images/loading.gif) 0 5px no-repeat;
     }
 }
-.navyDialogTip.navyDialogWrapper{
+.navyDialogTip{
     background:transparent;
     .navyDialogTable{
         .navyDialogContentContainer{
@@ -209,64 +210,101 @@
             position:relative;
             .navyDialogContent{
                 background: #fff;
-                border:1px solid red;
+                border:1px solid @tipBorderColor;
                 border-radius:5px;
                 padding: 5px 5px 5px 7px;
             }
         }
-        .navyTipArrow{
-            width:0;
-            height:0;
-            overflow:hidden;
-        }
-        .navyTipArrow1.arrowTop{
-            border-bottom-color:red;
-            top:-8px;
-        }
-        .navyTipArrow2.arrowTop{
-            border-bottom-color:#fff;
-            top:-7px;
-        }
-        .navyTipArrow1.arrowBottom{
-            border-top-color:red;
-            bottom:-8px;
-        }
-        .navyTipArrow2.arrowBottom{
-            border-top-color:#fff;
-            bottom:-7px;
-        }
-        .arrowTop,.arrowBottom{
-            left:50%;
-            margin-left: -10px;
-            border-top:10px solid transparent;
-            border-bottom:10px solid transparent;
-            border-left:10px dotted transparent;
-            border-right:10px dotted transparent;
-        }
-        .arrowLeft,.arrowRight{
-            top:50%;
-            margin-top: -10px;
-            border-top:10px dotted transparent;
-            border-bottom:10px dotted transparent;
-            border-left:10px solid transparent;
-            border-right:10px solid transparent;
-        }
-        .navyTipArrow1.arrowLeft{
-            border-right-color:red;
-            left:-8px;
-        }
-        .navyTipArrow2.arrowLeft{
-            border-right-color:#fff;
-            left:-7px;
-        }
-        .navyTipArrow1.arrowRight{
-            border-left-color:red;
-            right:-8px;
-        }
-        .navyTipArrow2.arrowRight{
-            border-left-color:#fff;
-            right:-7px;
-        }
+    }
+    .navyTipArrow{
+        width:0;
+        height:0;
+        overflow:hidden;
+        font-size:0;
+    }
+    .arrowBottom1,.arrowBottom2,.arrowTop1,.arrowTop2{
+        left:50%;
+        margin-left: -10px;
+        border-style:solid;
+    }
+    .arrowBottom1{
+        border-width:10px 10px 0 10px;
+        border-color:@tipBorderColor transparent transparent transparent;
+        _border-top:10px solid @tipBorderColor;
+        _border-bottom:0 solid transparent;
+        _border-left:10px dotted transparent;
+        _border-right:10px dotted transparent;
+        bottom:2px;
+    }
+    .arrowBottom2{
+        border-width:10px 10px 0 10px;
+        border-color:@tipBorderBgColor transparent transparent transparent;
+        _border-top:10px solid @tipBorderBgColor;
+        _border-bottom:0 solid transparent;
+        _border-left:10px dotted transparent;
+        _border-right:10px dotted transparent;
+        bottom:3px;
+    }
+    .arrowTop1{
+        border-width:0 10px 10px 10px;
+        border-color:transparent transparent @tipBorderColor transparent;
+        _border-bottom:10px solid @tipBorderColor;
+        _border-top:0 solid transparent;
+        _border-left:10px dotted transparent;
+        _border-right:10px dotted transparent;
+        top:2px;
+    }
+    .arrowTop2{
+        border-width:0 10px 10px 10px;
+        border-color:transparent transparent @tipBorderBgColor transparent;
+        _border-bottom:10px solid @tipBorderBgColor;
+        _border-top:0 solid transparent;
+        _border-left:10px dotted transparent;
+        _border-right:10px dotted transparent;
+        top:3px;
+    }
+    .arrowLeft1,.arrowLeft2,.arrowRight1,.arrowRight2{
+        top:50%;
+        margin-top: -10px;
+        border-style:solid;
+    }
+    .arrowLeft1{
+        border-width:10px 10px 10px 0;
+        border-color:transparent @tipBorderColor transparent transparent;
+        _border-right:10px solid @tipBorderColor;
+        _border-left:0 solid transparent;
+        _border-top:10px dotted transparent;
+        _border-bottom:10px dotted transparent;
+        left:2px;
+        _left: -9px;
+    }
+    .arrowLeft2{
+        border-width:10px 10px 10px 0;
+        border-color:transparent @tipBorderBgColor transparent transparent;
+        _border-right:10px solid @tipBorderBgColor;
+        _border-left:0 solid transparent;
+        _border-top:10px dotted transparent;
+        _border-bottom:10px dotted transparent;
+        left:3px;
+        _left: -8px;
+    }
+    .arrowRight1{
+        border-width:10px 0 10px 10px;
+        border-color:transparent transparent transparent @tipBorderColor;
+        _border-left:10px solid @tipBorderColor;
+        _border-right:0 solid transparent;
+        _border-top:10px dotted transparent;
+        _border-bottom:10px dotted transparent;
+        right:2px;
+    }
+    .arrowRight2{
+        border-width:10px 0 10px 10px;
+        border-color:transparent transparent transparent @tipBorderBgColor;
+        _border-left:10px solid @tipBorderBgColor;
+        _border-right:0 solid transparent;
+        _border-top:10px dotted transparent;
+        _border-bottom:10px dotted transparent;
+        right:3px;
     }
     .navyDialogTipBtnContainer{
         text-align: center;
@@ -284,6 +322,7 @@
     }
 }
 .navyToolTipWrapper{
+    width: auto;
     background:transparent;
     position: absolute;
     .navyToolTip{

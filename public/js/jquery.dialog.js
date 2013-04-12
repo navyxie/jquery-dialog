@@ -8,7 +8,7 @@
  */
 var noop = function(){};
 var NAVY = NAVY || {};
-NAVY.console = console || {log:noop,dir:noop};
+NAVY.console = window.console || {log:noop,dir:noop};
 NAVY.UTIL = NAVY.UTIL || {};
 NAVY.UTIL.Style = NAVY.UTIL.Style || {};
 NAVY.UTIL.Style.getMaxZIndex = function(){
@@ -207,7 +207,18 @@ NAVY.Dialog.prototype = {
         //如果有遮罩层
         if(options.isMask){
             if(!(_this.bodyObj.find('.navyMaskWrapper').length)){
-                _this.bodyObj.append('<div style="z-index: '+(1+maxZindex)+'" class="navyMaskWrapper"></div>');
+                var maskObj = $('<div style="z-index: '+(1+maxZindex)+'" class="navyMaskWrapper"></div>').appendTo(_this.bodyObj);
+                if($.browser.msie && ($.browser.version == "6.0")){
+                    var maskHeight;//遮罩层的高度
+                    var documentObj = $(document);
+                    var windowObj = $(window);
+                    var documentObjHeight = maskHeight = documentObj.height();
+                    var screenHeight = windowObj.height();//屏幕高度
+                    if(screenHeight>=documentObjHeight){
+                        maskHeight = screenHeight;
+                    }
+                    maskObj.height(maskHeight);
+                }
             }
         }
         return this;
@@ -406,7 +417,7 @@ NAVY.Tip = function(target,content,options){
     }
     var tipBorderColorCssText1 = tipBorderColorMap1[arrowClass] || '';
     var tipBorderColorCssText2 = tipBorderColorMap2[arrowClass] || '';
-    content = '<div class="navyTip">'+content+'</div><div '+tipBorderColorCssText1+' class="navyTipArrow navyTipArrow1 absolute '+arrowClass+'"></div><div '+tipBorderColorCssText2+' class="navyTipArrow navyTipArrow2 absolute '+arrowClass+'"></div>';
+    content = '<div class="navyTip">'+content+'</div><div '+tipBorderColorCssText1+' class="navyTipArrow navyTipArrow1 absolute '+arrowClass+'1"></div><div '+tipBorderColorCssText2+' class="navyTipArrow navyTipArrow2 absolute '+arrowClass+'2"></div>';
     if(options.isShowKnowBtn){
         content += '<div class="navyDialogTipBtnContainer"><a href="javascript:;" class="navyDialogBtnClick navyDialogTipKnowBtn">'+options.knowBtnText+'</a></div>'
     }
@@ -463,7 +474,6 @@ NAVY.ToolTip = function(target,options){
     var bgColor = defaultOptions.bgColor;
     var color = defaultOptions.color;
     var opacity = defaultOptions.opacity;
-    var isCenter = defaultOptions.isCenter;
     var navyToolTipStyleTxt = 'style=color:'+color+';background:'+bgColor+';opacity:'+opacity+';filter:alpha(opacity='+opacity*100+')';
     target = $(target);
     var offsetLeft = target.offset().left,offsetTop = target.offset().top;
@@ -485,8 +495,10 @@ NAVY.ToolTip = function(target,options){
             tempTop = tempTop > 0 ? eventTargetTop - toolTipHeight : tempTop;
             toolTipLeft = (totalLeft > totalWidth) ? tempLeft : eventTargetLeft;
             toolTipTop = (totalTop > totalHeight) ? tempTop : eventTargetTop+eventTargetHeight;
-            this.toolTipObj.offset({left:toolTipLeft+spaceH,top:toolTipTop+spaceV})
-
+            this.toolTipObj.offset({left:toolTipLeft+spaceH,top:toolTipTop+spaceV});
+            if($.browser.msie && ($.browser.version == "6.0")){
+                this.toolTipObj.css({width:toolTipWidth-spaceH,height:toolTipHeight-spaceV});
+            }
         }
     },function(e){
         $(this).attr('title',title);
