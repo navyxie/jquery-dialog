@@ -241,16 +241,16 @@ NAVY.Dialog.prototype = {
  * @param content alert提示的内容
  * @param options alert的配置，默认是成功框包含属性如下：
  * options = {
-         type : 'success',//alert框类型，默认是成功
-         bgType ：0,//alert的背景类型
-         dialogClass: 'navyDialogAlert',//增加alert的class,用于设置样式
-         autoCloseSecond:3,//自动关闭alert框，默认是3秒钟
-         position:'fixed',//alert的定位，默认是fixed
-         target:'body',//alert框的容器，默认是body
-         dialogWidth:null,//对话框的宽度
-         dialogHeight:null,//对话框的高度
-         marginLeft:null,//对话框距离容器左边的值
-         marginTop:null//对话框距离容器右边的值
+ type : 'success',//alert框类型，默认是成功
+ bgType ：0,//alert的背景类型
+ dialogClass: 'navyDialogAlert',//增加alert的class,用于设置样式
+ autoCloseSecond:3,//自动关闭alert框，默认是3秒钟
+ position:'fixed',//alert的定位，默认是fixed
+ target:'body',//alert框的容器，默认是body
+ dialogWidth:null,//对话框的宽度
+ dialogHeight:null,//对话框的高度
+ marginLeft:null,//对话框距离容器左边的值
+ marginTop:null//对话框距离容器右边的值
  * }
  * @return {NAVY.Dialog} 返回对话框对象
  * @constructor
@@ -318,21 +318,21 @@ NAVY.Alert = function(content,options){
  * @param target 提示框的容器
  * @param content 提示框显示的内容
  * @param options tip的配置，具体参数如下：
-   options = {
-     isShowKnowBtn:true,//是否显示我知道了按钮，默认现实我知道了按钮
-     knowBtnText：’知道了‘,//知道了按钮文本
-     dialogClass: '',//增加tip的class,用于设置样式
-     autoCloseSecond:0,//自动关闭tip框，默认是3秒钟
-     position:'absolute',//tip的定位，默认是fixed
-     target:'body',//tip框的容器，默认是body
-     knowBtnCbf：function(){},//点击“知道了”按钮回调函数
-     dialogWidth:null,//对话框的宽度
-     dialogHeight:null,//对话框的高度
-     marginLeft:|| null,//对话框距离容器左边的值
-     marginTop:|| null,//对话框距离容器右边的值
-     tipBorderColor:null,//提示框的颜色，注意16进制的颜色值前面加#号哦
-     arrowValue:null//水平方向从左往右，垂直方向从上往下
-   }
+ options = {
+ isShowKnowBtn:true,//是否显示我知道了按钮，默认现实我知道了按钮
+ knowBtnText：’知道了‘,//知道了按钮文本
+ dialogClass: '',//增加tip的class,用于设置样式
+ autoCloseSecond:0,//自动关闭tip框，默认是3秒钟
+ position:'absolute',//tip的定位，默认是fixed
+ target:'body',//tip框的容器，默认是body
+ knowBtnCbf：function(){},//点击“知道了”按钮回调函数
+ dialogWidth:null,//对话框的宽度
+ dialogHeight:null,//对话框的高度
+ marginLeft:|| null,//对话框距离容器左边的值
+ marginTop:|| null,//对话框距离容器右边的值
+ tipBorderColor:null,//提示框的颜色，注意16进制的颜色值前面加#号哦
+ arrowValue:null//水平方向从左往右，垂直方向从上往下
+ }
  * @return {NAVY.Dialog}
  * @constructor
  */
@@ -428,37 +428,6 @@ NAVY.Tip = function(target,content,options){
     }
     return tipObj;
 };
-//Navy封装的$.ajax方法，第一个参数为jquery ajax方法常用参数，第二个为ajax 提示框参数
-NAVY.Ajax = function(options,tipOptions){
-    options = options || {};
-    tipOptions = tipOptions || {};
-    tipOptions.sendTip = tipOptions.sendTip || '数据下载中...';//发送前的提示框
-    tipOptions.errorTip = tipOptions.errorTip || '出了点问题，请再试试！';//发送错误的提示框
-    tipOptions.okTip = tipOptions.okTip || '操作成功了';//发送成功的提示框
-    tipOptions.okObj = tipOptions.okObj || false;//okObj{key:ret,val:value}，这个时判断参数成功给予的提示框，假如有的话。
-    var okObj = tipOptions.okObj;
-    var ajaxLoading = NAVY.Alert(tipOptions.sendTip,{type:'loading'});
-    $.ajax({
-        url:options.url || "",
-        type:options.type || "post",
-        dataType:options.dataType || "json",
-        beforeSend:options.beforeSend || noop,
-        success:function(data){
-            ajaxLoading.closeDialog();
-            if(okObj){
-                if(data[okObj.key] == okObj.val){
-                    NAVY.Alert(tipOptions.okTip);
-                }else{
-                    NAVY.Alert(tipOptions.errorTip,{type:'warning'});
-                }
-            }
-            options.success(data);
-        } || noop,
-        complete:function(data){options.success(data)} || noop,
-        error:function(data){options.error(data);ajaxLoading.closeDialog();NAVY.Alert(tipOptions.errorTip,'error')} || noop,
-        timeout:options.timeout
-    });
-};
 //文本提示工具
 NAVY.ToolTip = function(target,options){
     var defaultOptions = {
@@ -468,7 +437,7 @@ NAVY.ToolTip = function(target,options){
         color:'#fff',//文本颜色
         opacity:0.8//透明度
     };
-    $.extend(defaultOptions.options);
+    $.extend(defaultOptions.options,options);
     var spaceV = defaultOptions.spaceV;
     var spaceH = defaultOptions.spaceH;
     var bgColor = defaultOptions.bgColor;
@@ -503,5 +472,39 @@ NAVY.ToolTip = function(target,options){
     },function(e){
         $(this).attr('title',title);
         this.toolTipObj.remove();
+    });
+};
+//Navy封装的$.ajax方法，第一个参数为jquery ajax方法常用参数，第二个为ajax 提示框参数
+NAVY.Ajax = function(options,tipOptions){
+    options = options || {};
+    tipOptions = tipOptions || {};
+    tipOptions.sendTip = tipOptions.sendTip || '数据下载中...';//发送前的提示框
+    tipOptions.errorTip = tipOptions.errorTip || '出了点问题，请再试试！';//发送错误的提示框
+    tipOptions.okTip = tipOptions.okTip || '操作成功了';//发送成功的提示框
+    tipOptions.okObj = tipOptions.okObj || false;//okObj{key:ret,val:value}，这个时判断参数成功给予的提示框，假如有的话。
+    options.error = options.error || noop;
+    options.complete = options.complete || noop;
+    options.success = options.success || noop;
+    var okObj = tipOptions.okObj;
+    var ajaxLoading = NAVY.Alert(tipOptions.sendTip,{type:'loading'});
+    $.ajax({
+        url:options.url || "",
+        type:options.type || "post",
+        dataType:options.dataType || "json",
+        beforeSend:options.beforeSend || noop,
+        success:function(data){
+            ajaxLoading.closeDialog();
+            if(okObj){
+                if(data[okObj.key] == okObj.val){
+                    NAVY.Alert(tipOptions.okTip);
+                }else{
+                    NAVY.Alert(tipOptions.errorTip,{type:'warning'});
+                }
+            }
+            options.success(data);
+        },
+        complete:function(data){options.success(data)} ,
+        error:function(data){options.error(data);ajaxLoading.closeDialog();NAVY.Alert(tipOptions.errorTip,'error')},
+        timeout:options.timeout
     });
 };
