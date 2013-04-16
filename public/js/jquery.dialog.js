@@ -54,6 +54,8 @@ NAVY.Dialog = function(contentHtml,options){
     this.options = defaultOptions;
     this.targetObj = $(this.options.target);
     this.bodyObj = $('body');
+    this.documentObj = $(document);
+    this.windowObj = $(window);
     this.init();
 };
 NAVY.Dialog.prototype = {
@@ -193,25 +195,33 @@ NAVY.Dialog.prototype = {
         var dialogObjMarginLeft = dialogObjWidth/2 , dialogObjMarginTop = dialogObjHeight/2;
         var marginLeft = options.marginLeft,marginTop = options.marginTop;
         //设置对话框的宽度和高度以及marginLeft和marginTop值
-        if(marginLeft !== null){
-            if(marginTop !== null){
-                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:marginTop,left:0,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
-            }else{
-                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:-dialogObjMarginTop,left:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
-            }
-        }else if(marginTop !== null){
+        if(navigator.userAgent.toLowerCase().indexOf('mobile') !== -1){
+            var totalHeight = _this.windowObj.height();
+            var docHeight = _this.documentObj.height();
+            totalHeight = Math.max(totalHeight,docHeight);
+            marginTop = _this.documentObj.scrollTop()+80;
             dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
         }else{
-            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:-dialogObjMarginTop,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+            if(marginLeft !== null){
+                if(marginTop !== null){
+                    dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:marginTop,left:0,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+                }else{
+                    dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:marginLeft,marginTop:-dialogObjMarginTop,left:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+                }
+            }else if(marginTop !== null){
+                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+            }else{
+                dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:-dialogObjMarginTop,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+            }
         }
         //如果有遮罩层
         if(options.isMask){
             if(!(_this.bodyObj.find('.navyMaskWrapper').length)){
                 var maskObj = $('<div style="z-index: '+(1+maxZindex)+'" class="navyMaskWrapper"></div>').appendTo(_this.bodyObj);
-                if($.browser.msie && ($.browser.version == "6.0")){
+                if($.browser.msie && ($.browser.version == "6.0" ) || navigator.userAgent.toLowerCase().indexOf('mobile') !== -1){
                     var maskHeight;//遮罩层的高度
-                    var documentObj = $(document);
-                    var windowObj = $(window);
+                    var documentObj = _this.documentObj;
+                    var windowObj = _this.windowObj;
                     var documentObjHeight = maskHeight = documentObj.height();
                     var screenHeight = windowObj.height();//屏幕高度
                     if(screenHeight>=documentObjHeight){
@@ -234,6 +244,9 @@ NAVY.Dialog.prototype = {
             _this.bodyObj.find('.navyMaskWrapper').remove();
         }
         return this;
+    },
+    getDialogObj:function(){
+        return this.dialogObj.find('.navyDialogContentContainer');
     }
 };
 /**
@@ -482,29 +495,38 @@ NAVY.Ajax = function(options,tipOptions){
     tipOptions.errorTip = tipOptions.errorTip || '出了点问题，请再试试！';//发送错误的提示框
     tipOptions.okTip = tipOptions.okTip || '操作成功了';//发送成功的提示框
     tipOptions.okObj = tipOptions.okObj || false;//okObj{key:ret,val:value}，这个时判断参数成功给予的提示框，假如有的话。
+    tipOptions.closeSec = tipOptions.closeSec || 2;//自动关闭提示框时间
     options.error = options.error || noop;
     options.complete = options.complete || noop;
     options.success = options.success || noop;
     var okObj = tipOptions.okObj;
+    var alertSec = {autoCloseSecond:tipOptions.closeSec};
     var ajaxLoading = NAVY.Alert(tipOptions.sendTip,{type:'loading'});
     $.ajax({
         url:options.url || "",
         type:options.type || "post",
+        data:options.data || {},
         dataType:options.dataType || "json",
         beforeSend:options.beforeSend || noop,
         success:function(data){
             ajaxLoading.closeDialog();
             if(okObj){
                 if(data[okObj.key] == okObj.val){
-                    NAVY.Alert(tipOptions.okTip);
+                    NAVY.Alert(tipOptions.okTip,alertSec);
                 }else{
-                    NAVY.Alert(tipOptions.errorTip,{type:'warning'});
+                    alertSec.type = 'warning';
+                    NAVY.Alert(tipOptions.errorTip,{type:alertSec});
                 }
             }
             options.success(data);
         },
         complete:function(data){options.success(data)} ,
-        error:function(data){options.error(data);ajaxLoading.closeDialog();NAVY.Alert(tipOptions.errorTip,'error')},
+        error:function(data){
+            options.error(data);
+            ajaxLoading.closeDialog();
+            alertSec.type = 'error';
+            NAVY.Alert(tipOptions.errorTip,alertSec);
+        },
         timeout:options.timeout
     });
 };
