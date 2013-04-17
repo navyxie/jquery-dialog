@@ -200,7 +200,7 @@ NAVY.Dialog.prototype = {
             var docHeight = _this.documentObj.height();
             totalHeight = Math.max(totalHeight,docHeight);
             marginTop = _this.documentObj.scrollTop()+80;
-            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
+            dialogObj.css({width:dialogObjWidth,height:dialogObjHeight,marginLeft:-dialogObjMarginLeft,marginTop:marginTop,top:0,overflow:'hidden',position:'absolute'}).find('.navyDialogTable').css({'width':dialogObjWidth,'height':dialogObjHeight});
         }else{
             if(marginLeft !== null){
                 if(marginTop !== null){
@@ -501,6 +501,7 @@ NAVY.Ajax = function(options,tipOptions){
     options.success = options.success || noop;
     var okObj = tipOptions.okObj;
     var alertSec = {autoCloseSecond:tipOptions.closeSec};
+    $.extend(alertSec,tipOptions);
     var ajaxLoading = NAVY.Alert(tipOptions.sendTip,{type:'loading'});
     $.ajax({
         url:options.url || "",
@@ -515,7 +516,7 @@ NAVY.Ajax = function(options,tipOptions){
                     NAVY.Alert(tipOptions.okTip,alertSec);
                 }else{
                     alertSec.type = 'warning';
-                    NAVY.Alert(tipOptions.errorTip,{type:alertSec});
+                    NAVY.Alert(tipOptions.errorTip,alertSec);
                 }
             }
             options.success(data);
