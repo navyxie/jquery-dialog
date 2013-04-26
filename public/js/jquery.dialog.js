@@ -7,6 +7,7 @@
  * date 2013-04-08
  */
 var noop = function(){};
+var isIE6 = $.browser.msie && ($.browser.version == "6.0" );
 var NAVY = NAVY || {};
 NAVY.console = window.console || {log:noop,dir:noop};
 NAVY.UTIL = NAVY.UTIL || {};
@@ -218,7 +219,7 @@ NAVY.Dialog.prototype = {
         if(options.isMask){
             if(!(_this.bodyObj.find('.navyMaskWrapper').length)){
                 var maskObj = $('<div style="z-index: '+(1+maxZindex)+'" class="navyMaskWrapper"></div>').appendTo(_this.bodyObj);
-                if($.browser.msie && ($.browser.version == "6.0" ) || navigator.userAgent.toLowerCase().indexOf('mobile') !== -1){
+                if(isIE6 || navigator.userAgent.toLowerCase().indexOf('mobile') !== -1){
                     var maskHeight;//遮罩层的高度
                     var documentObj = _this.documentObj;
                     var windowObj = _this.windowObj;
@@ -230,6 +231,14 @@ NAVY.Dialog.prototype = {
                     maskObj.height(maskHeight);
                 }
             }
+        }
+        if(isIE6 && options.position === 'fixed'){
+            var winObj = _this.windowObj;
+            var ie6Top = (document.documentElement.clientHeight - dialogObjHeight)/2;
+            ie6Top = Math.max(ie6Top,0);
+            winObj.scroll(function(){
+                _this.dialogObj.css({marginTop:0,top:winObj.scrollTop()+ie6Top});
+            })
         }
         return this;
     },
@@ -478,7 +487,7 @@ NAVY.ToolTip = function(target,options){
             toolTipLeft = (totalLeft > totalWidth) ? tempLeft : eventTargetLeft;
             toolTipTop = (totalTop > totalHeight) ? tempTop : eventTargetTop+eventTargetHeight;
             this.toolTipObj.offset({left:toolTipLeft+spaceH,top:toolTipTop+spaceV});
-            if($.browser.msie && ($.browser.version == "6.0")){
+            if(isIE6){
                 this.toolTipObj.css({width:toolTipWidth-spaceH,height:toolTipHeight-spaceV});
             }
         }
