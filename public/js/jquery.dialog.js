@@ -7,11 +7,12 @@
  * date 2013-04-08
  */
 var noop = function(){};
-var isIE6 = $.browser.msie && ($.browser.version == "6.0" );
 var NAVY = NAVY || {};
 NAVY.console = window.console || {log:noop,dir:noop};
 NAVY.UTIL = NAVY.UTIL || {};
 NAVY.UTIL.Style = NAVY.UTIL.Style || {};
+var UA = NAVY.UTIL.UA();
+var isIE6 = (UA[0] === 'msie' && UA[1] === '6.0');
 NAVY.UTIL.Style.getMaxZIndex = function(){
     var allTags = document.getElementsByTagName('*');
     var tagLens = allTags.length,i=0,maxZIndex=1;
@@ -331,7 +332,8 @@ NAVY.Alert = function(content,options){
         dialogWidth:options.dialogWidth || null,//对话框的宽度
         dialogHeight:options.dialogHeight || null,//对话框的高度
         marginLeft:options.marginLeft || null,//对话框距离容器左边的值
-        marginTop:options.marginTop || null//对话框距离容器右边的值
+        marginTop:options.marginTop || null,//对话框距离容器右边的值
+        isDrag:false
     };
     if(type === 'loading'){
         alertOptions.autoCloseSecond = 0;
@@ -389,7 +391,8 @@ NAVY.Tip = function(target,content,options){
         marginLeft:options.marginLeft || null,//对话框距离容器左边的值
         marginTop:options.marginTop || null,//对话框距离容器右边的值
         tipBorderColor:options.tipBorderColor || null,//提示框的颜色，注意16进制的颜色值前面加#号哦
-        arrowValue:options.arrowValue || null//水平方向从左往右，垂直方向从上往下
+        arrowValue:options.arrowValue || null,//水平方向从左往右，垂直方向从上往下
+        isDrag:false
     };
     var direction = options.direction || 'top';
     //箭头的方向
