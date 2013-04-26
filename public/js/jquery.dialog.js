@@ -48,7 +48,7 @@ NAVY.Dialog = function(contentHtml,options){
         position:'fixed',//对话框定位，默认为固定定位
         autoCloseSecond:0,//自动关闭对话框的时间，0表示不关闭,单位为秒
         knowBtnCbf:noop,//点击对话框内容时的回掉
-        isDrag:false//是否可以拖动
+        isDrag:true//是否可以拖动
     };
     this.contentHtml = contentHtml || '请填充对话框内容';
     $.extend(defaultOptions,options);
@@ -136,6 +136,9 @@ NAVY.Dialog.prototype = {
                             if(moveValueX % 2 === 0 || moveValueY % 2 === 0){
                                 var curLeft = startPos.left + moveValueX;
                                 var curTop = startPos.top + moveValueY;
+                                if(!isIE6){
+                                    curTop -= _this.windowObj.scrollTop();
+                                }
                                 curLeft = curLeft <= 0 ? 0  :curLeft;
                                 curTop = curTop <= 0 ? 0 :  curTop;
                                 dialogObj.css({left:curLeft,top:curTop});
