@@ -43,3 +43,42 @@ NAVY.UTIL.UA= function(ua) {
         version: match[ 2 ] || "0"
     };
 };
+NAVY.UTIL.Date = {
+    countDown:function(dom,second,cbf){
+        cbf = cbf || noop;
+        var setIntervalId = setInterval(function(){
+            if(second <= 0){
+                clearInterval(setIntervalId);
+                cbf();
+            }else{
+                second--;
+                dom.innerHTML = second;
+            }
+        },1000);
+    }
+};
+NAVY.UTIL.Search = {
+    searchToJson:function(){
+        var search = window.location.search;
+        if (!search){
+            return false;
+        }else{
+            search = search.substr(1);
+            var searchJson = {};
+            var searchArr = search.split('&');
+            for(var i = 0 , len = searchArr.length ; i < len ; i++){
+                var tempArr = searchArr[i].split('=');
+                searchJson[tempArr[0]] = tempArr[1];
+            }
+            return searchJson;
+        }
+    },
+    getSearchParam:function(param){
+        var searchJson = KALENGO.UTIL.Search.searchToJson();
+        if(!searchJson || !(searchJson[param])){
+            return false;
+        }else{
+            return searchJson[param];
+        }
+    }
+};
